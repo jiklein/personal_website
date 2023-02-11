@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <script>
+
+      var answer = "1013";    
+
+      function setAnswer() {
+        answer = "sdcsdc";
+      }
+
+      function addCode() {
+        var guess = document.getElementById("xx").value;
+
+        document.getElementById("my-div").innerHTML +=
+          guess + " " + rate(guess,answer) + "<br>";
+      }
+
+      function rate(guess, answer) {
+        var red = 0;
+        var white = 0;
+        var i = 0;
+
+        // Get red
+        while (i < guess.length) {
+          if (guess[i] == answer[i]) {
+            red = red + 1;
+            guess = guess.replace(guess[i], "")
+            answer = answer.replace(answer[i], "")
+          } else {
+            i = i + 1;
+          }
+        }
+
+        // Get white
+        for (i = 0; i < guess.length; i++) {
+          if (answer.indexOf(guess[i]) != -1) {
+            white = white + 1;
+            answer = answer.replace(guess[i], "")
+          }
+        }
+        return "" + red + white;
+      }
+
+    </script>
+  </head>
+  <body>
+    <button onclick="setAnswer()">Set Answer</button><br>
+    Format:<br>
+    guess {# in correct place, # correct color}<br>
+    <div id="my-div"></div>
+    <input type="text" id="xx" name="fname" value="0000"><br>
+    <button onclick="addCode()">Guess</button>
+  </body>
+</html>
