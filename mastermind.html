@@ -5,14 +5,30 @@
       var answer = "1013";    
 
       function setAnswer() {
-        answer = "sdcsdc";
+        answer = "";
+
+        for (var i = 0; i < 4; i++) {
+          answer += Math.floor(Math.random() * 6);
+        }
       }
 
+      function showAnswer() {
+        document.getElementById("my-div1").innerHTML = answer + "<br>";
+      }
+
+      function hideAnswer() {
+        document.getElementById("my-div1").innerHTML = "";
+      }
+      
       function addCode() {
         var guess = document.getElementById("xx").value;
 
         document.getElementById("my-div").innerHTML +=
           guess + " " + rate(guess,answer) + "<br>";
+      }
+
+      function clearAll() {
+        document.getElementById("my-div").innerHTML = "";
       }
 
       function rate(guess, answer) {
@@ -50,5 +66,9 @@
     <div id="my-div"></div>
     <input type="text" id="xx" name="fname" value="0000"><br>
     <button onclick="addCode()">Guess</button>
+    <button onclick="clearAll()">Clear</button><br>
+    <div id="my-div1"></div>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="hideAnswer()">Hide Answer</button>
   </body>
 </html>
