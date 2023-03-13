@@ -1,49 +1,37 @@
-var answer = "1013";
-
-var t = null;
-var speed = 1000;
+var timer = null;
+var delay = 1000;
 var pi = 0.0;
 var x = 1;
 var i = 0;
 
-
 function clean() {
-  document.getElementById("my-div").innerHTML = "";
+  document.getElementById("pi").innerHTML = "";
   pi = 0.0;
   x = 1;
   i = 0;
 }
 
 function set() {
-  speed = document.getElementById("xx").value;
-  document.getElementById("my-div4").innerHTML = speed;
+  delay = document.getElementById("delayInput").value;
+  document.getElementById("delay").innerHTML = delay;
 }
-
 
 function start() {
-
-    document.getElementById("my-div3").innerHTML =
+  document.getElementById("start").innerHTML =
     "<button onclick=\"stop()\">Stop</button><br>";
-  t = setInterval(run, speed);
+  timer = setInterval(run, delay);
 }
 
-
 function run() {
-
-
   pi += ((i % 2 == 0) ? 1 : -1) / x;
   i = (i + 1) % 2;
   x += 2;
 
-  document.getElementById("my-div").innerHTML = "" + (4*pi) + "<br>" +
-    document.getElementById("my-div").innerHTML;
-
+  document.getElementById("pi").innerHTML += (4*pi) + "<br>";
 }
 
 function stop() {
-  clearInterval(t);
-    document.getElementById("my-div3").innerHTML =
+  clearInterval(timer);
+  document.getElementById("start").innerHTML =
     "<button onclick=\"start()\">Start</button><br>";
 }
-
-
