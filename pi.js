@@ -27,7 +27,8 @@ function run() {
   i = (i + 1) % 2;
   x += 2;
 
-  document.getElementById("pi").innerHTML += (4*pi) + "<br>";
+  document.getElementById("pi").innerHTML = Number(4*pi).toFixed(15) +
+    " " + (delay < 500 ? "(+/-) 1" : (i % 2 == 0) ? "+ 4" : "- 4") + " / " + x;
 }
 
 function stop() {
