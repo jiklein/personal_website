@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <script>
+
+const INPUT = "<input type=\"text\" id=\"{0}\" value=\"{1}\">";
+const ADD = "<button onclick=\"add{0}()\">+</button>";
+const REMOVE = "<button onclick=\"delete{0}()\">-</button>";
+const COL = "Col";
+const ROW = "Row";
+const PAIR = "0,0";
+const COMMA = ",";
+const BLANK = "";
+const A = 64;
+const P = 79;
+var cols=3;
+var rows=3;
+
+window.onload = function() {
+  document.getElementById("div1").innerHTML = f(ADD,ROW) + f(REMOVE,ROW);
+  refresh();
+};
+
+function refresh() {
+  var s = "";
+  
+  // Add input boxes
+  for (var i = 0; i < rows; i++) {
+    for (var j = 0; j < cols; j++) {
+      var id = i + COMMA + j;
+      var letter = String.fromCharCode((i ? A : P) + i + j);
+      var value = i&&j ? PAIR : i|j ? letter : BLANK;
+      
+      s += f(INPUT, id, value);
+    }
+
+    // Add buttons
+    if (i==0) {
+      s += f(ADD,COL) + f(REMOVE,COL);
+    }
+    s+= "<br>";
+  } 
+  document.getElementById("div").innerHTML = s;
+}
+
+function addCol() {
+  cols++;
+  refresh();
+}
+
+function addRow() {
+  rows++;
+  refresh();
+}
+function deleteCol() {
+  cols = Math.max(2,cols-1);
+  refresh();
+}
+
+function deleteRow() {
+  rows = Math.max(2,rows-1);
+  refresh();
+}
+
+function f(format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined' ? args[number] : match;
+    });
+}
+    </script>
+  </head>
+  <body>
+    Iterated Dominance:
+    <div id="div"></div>
+    <div id="div1"></div>
+    <button onclick="test()">Run</button><br>
+    <div id="div2"></div>
+  </body>
+</html>
