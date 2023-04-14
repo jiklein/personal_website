@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <script>
+
+      const INPUT = "<input type=\"text\" id=\"{0}\" value=\"{1}\">";
+      const COMMA = ",";
+      var size=2;
+
+      window.onload = function() {
+        refresh();
+      };
+
+      function refresh() {
+        var s = "";
+
+        // Add input boxes
+        for (var i = 0; i < size; i++) {
+          for (var j = 0; j < size; j++) {
+            s += f(INPUT, i + COMMA + j, 0);
+          }
+          s += "<br>";
+        } 
+        document.getElementById("div").innerHTML = s;
+      }
+
+      function add() {
+        size++;
+        refresh();
+      }
+
+      function remove() {
+        size = Math.max(2, size - 1);
+        refresh();
+      }
+
+      function random() {
+        for (var i = 0; i < size; i++) {
+          for (var j = 0; j < size; j++) {
+            document.getElementById(i + COMMA + j).value = 
+              Math.floor(Math.random() * 21) - 10;
+          }
+        }
+      }
+      
+      function run() {
+        m=[];
+        for (var i = 0; i < size; i++) {
+          var mrow = [];
+          for (var j = 0; j < size; j++) {
+            mrow.push(document.getElementById(i + COMMA + j).value);
+          }
+          m.push(mrow);
+        }
+        document.getElementById("div1").innerHTML = det(m);
+      }
+
+      function det(m) {
+
+        // base case
+        if (m.length == 2) {
+          return (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
+        }
+
+        var total = 0;
+        for (var i = 0; i < m.length; i++) {
+          var mprime = [];
+
+          // build mprime
+          for (var j = 1; j < m.length; j++) {
+            var mprimerow = [];
+            for (var k = 0; k < m.length; k++) {
+              if (k != i) {
+                mprimerow.push(m[j][k]);
+              }
+            }
+            mprime.push(mprimerow);
+          }
+
+          // recurse
+          total += ((i % 2 == 0) ? 1 : -1) * m[0][i] * det(mprime);
+        }
+        return total;
+      }
+
+      function f(format) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return format.replace(/{(\d+)}/g, function(match, number) { 
+          return typeof args[number] != 'undefined' ? args[number] : match;
+        });
+      }
+    </script>
+  </head>
+    <body>
+      Determinant:<br>
+      <button onclick="add()">+</button>
+      <button onclick="remove()">-</button>
+      <button onclick="random()">Random</button>
+      <button onclick="run()">Run</button><br>
+      <div id="div"></div>
+      <div id="div1"></div>
+    </body>
+</html>
