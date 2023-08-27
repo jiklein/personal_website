@@ -1,17 +1,42 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-  <title>Jeromey Klein</title>
+    <title>Jeromey Klein</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
-<body style="text-align:center">
+  <body>
+    
+    <div id="page">
+    <div style="position: absolute;top: 30%;left: 50%;transform: translate(-50%, -50%);">
+    <div id="signInDiv"></div>
+    </div>
+    </div>
+    <div id="loggedin"></div>
+    
+    <script>
+      window.onload = function() {
+        google.accounts.id.initialize({
+          client_id: "702576059965-cnt0qf3dpjmgj627flb57r7s13s1t9rp.apps.googleusercontent.com",
+          callback: handleCallbackResponse
+        });
 
-  <br>
-  Games:
-  <br>
-  <br>
-<a href="http://jeromeyklein.com/pi.html" target="_blank">Pi</a><br>
-<a href="http://jeromeyklein.com/determinant.html" target="_blank">Determinant</a><br>
-<a href="http://jeromeyklein.com/mastermind.html" target="_blank">Mastermind</a><br>
-<a href="http://jeromeyklein.com/iterated.html" target="_blank">Game Theory</a><br>
+        google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          { theme: "outline", size: "large" }
+        );
+      };
+      
+      function handleCallbackResponse(response) {
+        document.getElementById("page").innerHTML = "Logged in: " +
+          new Date().toLocaleString() +
+        `<div style="text-align:center"><br>Games:<br><br>`+
+        `<a href="http://jeromeyklein.com/pi.html" target="_blank">Pi</a><br>` +
+        `<a href="http://jeromeyklein.com/determinant.html" target="_blank">Determinant</a><br>` +
+        `<a href="http://jeromeyklein.com/mastermind.html" target="_blank">Mastermind</a><br>` +
+        `<a href="http://jeromeyklein.com/iterated.html" target="_blank">Game Theory</a><br></div>`;
+      }
 
+      </script>
   </body>
 </html>
+
