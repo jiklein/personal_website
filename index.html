@@ -27,6 +27,7 @@
       };
       
       function handleCallbackResponse(response) {
+        console.log(response.credential);
         document.getElementById("page").innerHTML = "Logged in: " +
           new Date().toLocaleString() +
         `<div style="text-align:center"><br>Games:<br><br>`+
