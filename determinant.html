@@ -1,10 +1,19 @@
 <html>
   <head>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1044.0.min.js"></script>
     <script>
 
       const INPUT = "<input type=\"text\" id=\"{0}\" value=\"{1}\">";
       const COMMA = ",";
       var size=2;
+      
+      AWS.config.region = "us-east-2";
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "us-east-2:10feb919-2495-4028-a7bc-41c2c0ce6670",
+      });
+
+      // Create client.
+      const lambda = new AWS.Lambda();
 
       window.onload = function() {
         refresh();
@@ -51,35 +60,18 @@
           }
           m.push(mrow);
         }
-        document.getElementById("div1").innerHTML = det(m);
-      }
+        
+        const params = {
+          FunctionName: 'determinant', /* required */
+          Payload: JSON.stringify( { Matrix: m })
+        };
+        lambda.invoke(params,  function (err, data){
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log('Success');           // successful response
 
-      function det(m) {
-
-        // base case
-        if (m.length == 2) {
-          return (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
-        }
-
-        var total = 0;
-        for (var i = 0; i < m.length; i++) {
-          var mprime = [];
-
-          // build mprime
-          for (var j = 1; j < m.length; j++) {
-            var mprimerow = [];
-            for (var k = 0; k < m.length; k++) {
-              if (k != i) {
-                mprimerow.push(m[j][k]);
-              }
-            }
-            mprime.push(mprimerow);
-          }
-
-          // recurse
-          total += ((i % 2 == 0) ? 1 : -1) * m[0][i] * det(mprime);
-        }
-        return total;
+          var payload = JSON.parse(data.Payload);
+          document.getElementById("div1").innerHTML = payload.result;
+        });
       }
 
       function f(format) {
