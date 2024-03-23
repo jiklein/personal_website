@@ -1,0 +1,65 @@
+<html>
+  <head>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1044.0.min.js"></script>
+    <script>
+
+      AWS.config.region = "us-east-2";
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "us-east-2:10feb919-2495-4028-a7bc-41c2c0ce6670",
+      });
+
+      // Create client.
+      const lambda = new AWS.Lambda();
+      var to = localStorage.getItem("to");
+      var token = localStorage.getItem("token");
+
+      window.onload = function() {
+        var decryptedToken = JSON.parse(atob(token.split('.')[1]));
+        console.log(decryptedToken.email); 
+
+        const params = {
+          FunctionName: 'chat', // required 
+          Payload: JSON.stringify( {
+            Token: token,
+            To: to,
+            Get: true
+          })
+        };
+        lambda.invoke(params,  function (err, data){
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log(data);           // successful response
+
+          var payload = JSON.parse(data.Payload);
+          document.getElementById("div").innerHTML = 
+            payload.Item["chat"].replaceAll(decryptedToken.email, "Me");
+        });
+      };
+      
+      function send() {
+        
+        const params = {
+          FunctionName: 'chat', /* required */
+          Payload: JSON.stringify( { 
+            Token: token,
+            To: to,
+            Message: document.getElementById("input").value
+            })
+        };
+        lambda.invoke(params,  function (err, data){
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log(data);           // successful response
+
+          document.getElementById("div").innerHTML += "Me: " + 
+            document.getElementById("input").value + "<br>";
+        });
+      }
+
+    </script>
+  </head>
+    <body>
+      Chat:<br>
+      <div id="div"></div>
+      <input type="text" id="input">
+      <button onclick="send()">Send</button>
+    </body>
+</html>

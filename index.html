@@ -37,7 +37,7 @@
       
       function handleCallbackResponse(response) {
         const params = {
-          FunctionName: 'user1', // required 
+          FunctionName: 'login', // required 
           Payload: JSON.stringify( {
             Token: response.credential
           })
@@ -55,6 +55,7 @@
         `<a href="http://jeromeyklein.com/pi.html" target="_blank">Pi</a><br>` +
         `<a href="http://jeromeyklein.com/determinant.html" target="_blank">Determinant</a><br>` +
         `<a href="http://jeromeyklein.com/mastermind.html" target="_blank">Mastermind</a><br>` +
+        `<a href="http://jeromeyklein.com/chats.html" target="_blank">Chat</a><br>` +
         `<a href="http://jeromeyklein.com/iterated.html" target="_blank">Game Theory</a><br></div>`;
       }
 

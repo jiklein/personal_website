@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1044.0.min.js"></script>
+    <script>
+
+      AWS.config.region = "us-east-2";
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "us-east-2:10feb919-2495-4028-a7bc-41c2c0ce6670",
+      });
+
+      // Create client.
+      const lambda = new AWS.Lambda();
+      const BUTTON = "<button onclick=\"openChat(\'{0}\')\">{0}</button>";
+
+      var chats = ["hi@gmail.com", "hello@gmail.com"];
+
+      window.onload = function() {
+        const params = {
+          FunctionName: 'user', // required 
+          Payload: JSON.stringify( {
+            Token: localStorage.getItem("token")
+          })
+        };
+        lambda.invoke(params,  function (err, data){
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log(data);           // successful response
+
+          var payload = JSON.parse(data.Payload);
+          if (payload.body.Item["friends"]) {
+            chats = payload.body.Item["friends"];
+          } else {
+            chats = [];
+          }
+          refresh();
+        });
+      };
+
+      function refresh() {
+        var s = "";
+        // Add input boxes
+        for (var i = 0; i < chats.length; i++) {
+          s += f(BUTTON, chats[i]) + "<br>";
+        } 
+        document.getElementById("div").innerHTML = s;
+      }
+
+      function add() {
+        var newUser = document.getElementById("input").value;
+        chats.push(newUser);
+
+        const params = {
+          FunctionName: 'user', // required 
+          Payload: JSON.stringify( {
+            Token: localStorage.getItem("token"),
+            Add: newUser
+          })
+        };
+        lambda.invoke(params,  function (err, data){
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log(data);           // successful response
+        });
+
+        refresh();
+      }
+
+      function openChat(user) {
+        localStorage.setItem("to", user);
+        window.open("http://jeromeyklein.com/chat.html");
+      }
+
+      function f(format) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return format.replace(/{(\d+)}/g, function(match, number) { 
+          return typeof args[number] != 'undefined' ? args[number] : match;
+        });
+      }
+    </script>
+  </head>
+  <body>
+    Chats:<br>
+    <input type="text" id="input">
+    <button onclick="add()">Add</button>
+    <div id="div"></div>
+  </body>
+</html>
