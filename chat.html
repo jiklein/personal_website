@@ -19,11 +19,7 @@
 
         const params = {
           FunctionName: 'chat', // required 
-          Payload: JSON.stringify( {
-            Token: token,
-            To: to,
-            Get: true
-          })
+          Payload: JSON.stringify( { Token: token, To: to, Get: true })
         };
         lambda.invoke(params,  function (err, data){
           if (err) console.log(err, err.stack); // an error occurred
@@ -37,20 +33,17 @@
       
       function send() {
         
+        var message = document.getElementById("input").value;
+
         const params = {
           FunctionName: 'chat', /* required */
-          Payload: JSON.stringify( { 
-            Token: token,
-            To: to,
-            Message: document.getElementById("input").value
-            })
+          Payload: JSON.stringify( { Token: token, To: to, Message: message })
         };
         lambda.invoke(params,  function (err, data){
           if (err) console.log(err, err.stack); // an error occurred
           else console.log(data);           // successful response
 
-          document.getElementById("div").innerHTML += "Me: " + 
-            document.getElementById("input").value + "<br>";
+          document.getElementById("div").innerHTML += "Me: " + message + "<br>";
         });
       }
 

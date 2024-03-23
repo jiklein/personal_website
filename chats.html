@@ -12,14 +12,13 @@
       const lambda = new AWS.Lambda();
       const BUTTON = "<button onclick=\"openChat(\'{0}\')\">{0}</button>";
 
+      var token = localStorage.getItem("token");
       var chats = ["hi@gmail.com", "hello@gmail.com"];
 
       window.onload = function() {
         const params = {
           FunctionName: 'user', // required 
-          Payload: JSON.stringify( {
-            Token: localStorage.getItem("token")
-          })
+          Payload: JSON.stringify( { Token: token })
         };
         lambda.invoke(params,  function (err, data){
           if (err) console.log(err, err.stack); // an error occurred
@@ -50,10 +49,7 @@
 
         const params = {
           FunctionName: 'user', // required 
-          Payload: JSON.stringify( {
-            Token: localStorage.getItem("token"),
-            Add: newUser
-          })
+          Payload: JSON.stringify( { Token: token, Add: newUser })
         };
         lambda.invoke(params,  function (err, data){
           if (err) console.log(err, err.stack); // an error occurred
